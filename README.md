@@ -8,7 +8,7 @@ A Chrome extension (Manifest V3) that adds a badge to every LinkedIn job card te
 | ✅ **EU · fits you** | Restricted, but the restriction includes your country or region |
 | 🔒 **US only** | Locked to one or more countries you're not in |
 | 🧭 **LATAM only** / 🕒 **US time zones** | Region or time-zone requirement that doesn't match you |
-| ❔ **Unclear · likely Germany** | No explicit rule, but clues point to a country (location, currency, required language, company country, local terms) — hover to see them |
+| 🤔 **Unclear · likely Germany** | No explicit rule, but clues point to a country (location, currency, required language, company country, local terms) — hover to see them |
 | 🔎 **No restriction stated** | Description read, no location rule and no clues |
 | 🏢 **On-site / Hybrid** | Not fully remote |
 
@@ -37,7 +37,7 @@ Works in any Chromium browser (Chrome, Edge, Brave, Arc) on macOS, Windows and L
 ## Settings (popup)
 
 - **I can work from** — decides what turns green.
-- **Jobs I can't take** — Show / Dim / Hide the 🔒 ones.
+- **Jobs I can't take** — Show / Hide the 🔒 ones.
 - Options to also include region/time-zone mismatches and on-site/hybrid jobs.
 - **Re-check all jobs** — clears the cache.
 
@@ -51,10 +51,10 @@ node test/rules.test.js
 
 - LinkedIn changes its markup often; selectors live at the top of `content.js` sections (`findCards`, `DETAIL_*`).
 - Automated access is against LinkedIn's terms. The extension stays light (only visible cards, throttled, cached), but very heavy scrolling sessions could still get rate-limited.
-- Keyword rules can't read every vague posting — that's what ❔ is for.
+- Keyword rules can't read every vague posting — that's what 🤔 is for.
 
 ## Next steps
 
 1. Shared cache backend (`jobId → verdict`) so each job is analyzed once for all users.
-2. On-device AI (Chrome Prompt API / Gemini Nano) for ❔ jobs, with a cloud fallback.
+2. On-device AI (Chrome Prompt API / Gemini Nano) for 🤔 jobs, with a cloud fallback.
 3. Chrome Web Store listing (needs a privacy policy and screenshots).

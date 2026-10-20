@@ -42,8 +42,6 @@
 @keyframes rr-spin { to { transform: rotate(360deg); } }
 
 /* Jobs you can't take */
-.rr-dim { opacity: .35 !important; transition: opacity .15s ease; }
-.rr-dim:hover { opacity: .9 !important; }
 .rr-hidden { display: none !important; }
 
 /* LinkedIn dark theme */

@@ -21,7 +21,7 @@
     $(k).addEventListener('change', (e) => chrome.storage.sync.set({ [k]: e.target.checked }));
   }
   document.querySelectorAll('input[name="mode"]').forEach((r) => {
-    r.checked = r.value === s.mode;
+    r.checked = r.value === (s.mode === 'hide' ? 'hide' : 'show');
     r.addEventListener('change', () => chrome.storage.sync.set({ mode: r.value }));
   });
 

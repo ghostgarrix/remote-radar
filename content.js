@@ -242,7 +242,7 @@
 
   function readCardMeta(card) {
     const text = card.innerText || card.textContent || '';
-    const lines = text.split('\n').map((s) => s.trim()).filter((s) => s && !/^(?:🌍|✅|🔒|🧭|🕒|❔|🏢|Checking remote)/u.test(s));
+    const lines = text.split('\n').map((s) => s.trim()).filter((s) => s && !/^(?:🌍|✅|🔒|🧭|🕒|🤔|🏢|Checking remote)/u.test(s));
     const a = card.querySelector('a[href*="/jobs/view/"], a[href*="currentJobId="]');
     let title = ((a && (a.getAttribute('aria-label') || a.innerText)) || lines[0] || '').trim().split('\n')[0];
     title = title.replace(/\s+with verification$/i, '');
@@ -486,7 +486,7 @@
     let wrap = card.querySelector('.rr-wrap');
     if (!settings.enabled) {
       if (wrap) wrap.remove();
-      card.classList.remove('rr-dim', 'rr-hidden');
+      card.classList.remove('rr-hidden');
       return;
     }
     const { ev, key } = badgeKey(id);
@@ -496,7 +496,6 @@
       placeBadge(card, wrap, id);
     }
     const blocked = isBlocked(ev);
-    card.classList.toggle('rr-dim', blocked && settings.mode === 'dim');
     card.classList.toggle('rr-hidden', blocked && settings.mode === 'hide');
   }
 
@@ -666,6 +665,17 @@
       if (!node) return '(no candidate element)';
       return node.outerHTML.replace(/\s(?:class|style)="[^"]{60,}"/g, ' class="…"').replace(/<svg[\s\S]*?<\/svg>/g, '<svg/>').slice(0, 2500);
     })();
+    const unbadged = (() => {
+      const detail = detailRoot();
+      const items = [...document.querySelectorAll('main li, main [role="listitem"], main [role="button"]')].filter((n) => {
+        const len = (n.innerText || '').trim().length;
+        return len > 30 && len < 1500 && !n.querySelector('.rr-wrap') && !n.closest('.rr-wrap, .rr-chip')
+          && !(detail && (detail.contains(n) || n.contains(detail)))
+          && ![...lastCards.values()].some((c) => c.contains(n) || n.contains(c));
+      });
+      const clean = (n) => n.outerHTML.replace(/\s(?:class|style)="[^"]{60,}"/g, ' class="…"').replace(/<svg[\s\S]*?<\/svg>/g, '<svg/>').slice(0, 1800);
+      return `${items.length} candidates\n` + (items.slice(0, 3).map(clean).join('\n---\n') || '(none)');
+    })();
     const listSample = (() => {
       const items = [...document.querySelectorAll('main li, [role="list"] > *')].filter((n) => (n.innerText || '').trim().length > 30).slice(0, 2);
       return items.map((n) => n.outerHTML.replace(/<svg[\s\S]*?<\/svg>/g, '<svg/>').slice(0, 1500)).join('\n---\n') || '(none)';
@@ -686,6 +696,9 @@
       '',
       '--- card whose job ID could not be read ---',
       stats.orphanSample ? stats.orphanSample.outerHTML.replace(/<svg[\s\S]*?<\/svg>/g, '<svg/>').slice(0, 2500) : '(none)',
+      '',
+      '--- list items with no badge and no card ---',
+      unbadged,
       '',
       '--- list items sample ---',
       listSample,

@@ -489,9 +489,9 @@
       default: {
         const clues = r.clues && r.clues.length ? `Clues: ${r.clues.join('; ')}` : null;
         const base = ['No explicit location rule found.', clues, !clues && r.hint ? `LinkedIn location: ${r.hint}` : null, ...(r.notes || []), quote];
-        if (r.lean) return { tone: 'grey', icon: '❔', text: `Unclear · likely ${r.lean}`, tip: tip(base), block: null };
+        if (r.lean) return { tone: 'grey', icon: '🤔', text: `Unclear · likely ${r.lean}`, tip: tip(base), block: null };
         if (r.hasDescription) return { tone: 'grey', icon: '🔎', text: 'No restriction stated', tip: tip(base), block: null };
-        return { tone: 'grey', icon: '❔', text: 'Unclear', tip: tip(base), block: null };
+        return { tone: 'grey', icon: '🤔', text: 'Unclear', tip: tip(base), block: null };
       }
     }
   }
