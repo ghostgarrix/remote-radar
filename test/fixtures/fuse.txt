@@ -1,0 +1,35 @@
+Fuse is an AI-first energy company on a mission to make energy abundant and affordable, fast. We combine first-principles thinking with cutting-edge technology to build a radically better energy system.
+
+We've raised over $200M from top-tier investors including Balderton, Lakestar, Accel, Creandum, Lowercarbon, Ribbit, 20VC, Hummingbird and Collaborative Fund, alongside strategic angels including Nico Rosberg and GPs behind Meta, Revolut, Spotify and Uber.
+
+We're building a fully integrated energy company: developing our own solar, batteries and other generation projects, building our own hardware, improving and developing grid infrastructure, trading power in real time, and installing distributed energy in homes. By selling directly to consumers, we cut out the middleman, lower costs and pass the savings on to our customers.
+
+We're hiring a Senior/Lead Backend Engineer to build the core digital infrastructure for a next-generation energy company. You'll work closely with product across the full back-end and engineer backend systems that are second to none.
+
+Responsibilities
+
+* Own systems end-to-end, from design and architecture through to production, with a high degree of autonomy as an individual contributor. Responsibilities include, but are not limited to:
+* Building the inference layer for our AI workloads, serving millions of prompts per day across customer support and meter-reading OCR, and migrate workloads onto our own GPU infrastructure
+* Working on one of the core data challenges in energy: settlement data can arrive months after delivery, requiring systems that support continuous recalculation as new data becomes available
+* Developing our real-time billing engine, including per-customer ordering and idempotency, audit trails, and pricing based on half-hourly meter data
+* Building and extending our trading and hedging systems, covering forward markets, portfolio optimisation, and reconciliation against exchanges we trade on directly
+* ...and more
+
+Requirements
+
+* Demonstrable excellence as a software engineer
+* 3+ years of software engineering experience, with requirements varying by role level, from individual contributor to lead.
+* Proven ability to define and build complex systems
+* Hands-on experience shipping highly available production systems
+* Clear communication
+* Bonus: infrastructure as code (e.g. AWS CDK); experience in the energy sector; experience shipping consumer-facing products
+
+Benefits
+
+* Competitive salary and eligibility for equity
+* Biannual bonus scheme
+* Fully expensed tech to match your needs
+* Private health insurance
+* Breakfast and dinner allowance for office-based employees
+
+As we hire globally, benefits vary by location.

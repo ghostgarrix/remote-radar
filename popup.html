@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Remote Radar</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="icons/icon48.png" alt="" width="32" height="32">
+    <div class="brand">
+      <h1>Remote Radar</h1>
+      <p>Remote-eligibility badges for LinkedIn Jobs</p>
+    </div>
+    <label class="switch" title="Turn badges on or off">
+      <input type="checkbox" id="enabled">
+      <span></span>
+    </label>
+  </header>
+
+  <section>
+    <label class="label" for="home">I can work from</label>
+    <select id="home"></select>
+    <p class="help">Jobs restricted to your country or region show as green.</p>
+  </section>
+
+  <section>
+    <span class="label">Jobs I can't take</span>
+    <div class="seg" role="radiogroup" aria-label="Jobs I can't take">
+      <label><input type="radio" name="mode" value="show"><span>Show</span></label>
+      <label><input type="radio" name="mode" value="dim"><span>Dim</span></label>
+      <label><input type="radio" name="mode" value="hide"><span>Hide</span></label>
+    </div>
+    <label class="check"><input type="checkbox" id="includeOrange"> Include region &amp; time-zone mismatches</label>
+    <label class="check"><input type="checkbox" id="includeOnsite"> Include on-site &amp; hybrid jobs</label>
+  </section>
+
+  <section class="legend">
+    <span class="label">Badges</span>
+    <ul>
+      <li><b class="rr-green">🌍 Worldwide</b> open to any country</li>
+      <li><b class="rr-green">✅ EU · fits you</b> restricted, but includes you</li>
+      <li><b class="rr-red">🔒 US only</b> locked to a country</li>
+      <li><b class="rr-orange">🧭 LATAM only</b> region or 🕒 time zone</li>
+      <li><b class="rr-grey">❔ Unclear</b> no explicit rule found</li>
+      <li><b class="rr-grey">🏢 On-site</b> not fully remote</li>
+    </ul>
+    <p class="help">Hover a badge on LinkedIn to see the sentence it's based on.</p>
+  </section>
+
+  <footer>
+    <span id="stats"></span>
+    <button id="clear" type="button">Re-check all jobs</button>
+  </footer>
+
+  <script src="rules.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

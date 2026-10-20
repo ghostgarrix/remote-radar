@@ -1,0 +1,30 @@
+{
+  "manifest_version": 3,
+  "name": "Remote Radar – remote job filter for LinkedIn",
+  "short_name": "Remote Radar",
+  "version": "0.3.0",
+  "description": "Shows on every LinkedIn job card whether the remote job is worldwide, limited to a region, or locked to one country.",
+  "permissions": ["storage"],
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Remote Radar",
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.linkedin.com/*"],
+      "js": ["rules.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}

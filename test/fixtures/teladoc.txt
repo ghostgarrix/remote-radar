@@ -1,0 +1,51 @@
+
+About UsTeladoc Health Canada is a virtual care provider that proudly serves over 9 million Canadians from coast to coast to coast. We use proprietary health signals and personalized interactions to drive better health outcomes across the full continuum of care, at every stage in a person’s health journey. Teladoc Health leverages more than two decades of expertise and data-driven insights to meet Canada's growing needs.
+Summary of PositionThe Senior Frontend Developer helps build responsive, high-quality applications across web and mobile. In this role, they’ll work hands-on with React and React Native, collaborating closely with product managers, designers, and engineers to turn ideas into functional products. They’ll bring experience building modern user interfaces, a commitment to quality, and the adaptability to work in an environment where requirements evolve and iteration is expected.
+Their first mission is to join a team rebuilding our care delivery system from the ground up - across both mobile and web – using modern, cutting-edge technologies. From day one, they’ll contribute directly to shaping how users experience our platform. The work is highly visible and central to our success, with real impact on how thousands of people interact with care.
+Essential Duties and Responsibilities
+Build responsive user interfaces for web and mobile using React and React Native
+Collaborate with product managers, designers, and engineers to explore ideas, shape requirements, and deliver functional prototypes
+Integrate frontend components with backend APIs and services to deliver full functionality
+Write and maintain unit, integration, and end-to-end tests to ensure frontend reliability, usability, and performance across web and mobile
+Debug, test, and refine code to support rapid iteration and continuous feedback
+Implement frontend security best practices, including input validation, secure data handling, and collaboration with backend teams to protect user data
+Ensure strong performance and compatibility across browsers and devices
+Work with the existing component library, extending it where needed and contributing improvements back when appropriate
+Interface with legacy systems when required to support integration or migration
+Adapt to evolving technical directions, including working with other frontend frameworks as necessary
+Prototype and test experimental features as part of an iterative, discovery-driven process
+Help shape delivery workflows and contribute to evolving team practices and standards
+Participate in planning, code reviews, and technical discussions
+Maintain clear, concise documentation of components, decisions, and processes
+Stay current with modern frontend tools and approaches, applying them where useful
+
+Supervisory ResponsibilitiesNo
+Qualifications Expected for PositionRequired:
+Bachelor’s degree required (additional years of work experience may be substituted)
+A minimum of 6 years of frontend software development experience
+Strong proficiency in HTML, CSS, JavaScript, and TypeScript with demonstrated expertise in React
+Experience building mobile applications with React Native or similar cross-platform frameworks
+Experience with state management solutions (Redux or similar)
+Proven ability to build responsive, accessible interfaces that work across browsers and devices
+Hands-on experience integrating frontend applications with backend APIs and services
+Solid understanding of frontend testing practices, including unit, integration, and end-to-end testing
+Familiarity with frontend security best practices, including input validation and secure data handling
+Experience working with component libraries and design systems
+Strong communication skills with the ability to collaborate effectively with designers, product managers, and backend engineers
+Comfort with ambiguity and evolving requirements in a fast-paced environment
+
+Strongly Preferred:
+Familiarity with CI/CD pipelines and frontend build tooling (Webpack or similar)
+Prior work in regulated industries with compliance and data protection requirements
+
+Nice to Have:
+Familiarity with healthcare terminology standards (e.g., ICD-10)
+Experience with healthcare data standards (FHIR, HL7v2, EMPI) and understanding of clinical/administrative workflows
+Background in healthcare technology or care delivery organizations
+Experience with accessibility standards (WCAG 2.2 or similar) and assistive technologies
+
+Hourly Rate Range$57.69 to $72.12/hour
+Position TypeNet New
+Work Environment☐ Office ☐ Remote ☒ Hybrid (Office & Remote)
+At Teladoc Health Canada we thrive on difference and individuality. Teladoc Health Canada is proud to be an equal opportunity workplace and is an affirmative action employer. We are committed to equal employment opportunity regardless of race, color, ancestry, religion, sex, national origin, sexual orientation, age, citizenship, marital status, disability, gender identity or Veteran status.
+We are committed to fostering an inclusive, accessible environment, where all employees and customers feel valued, respected and supported. We are dedicated to building a workforce that reflects the diversity of our customers and communities in which we live and serve. If you require an accommodation for any stage of the recruitment process / interview process (including alternate formats of materials, or accessible meeting rooms or other accommodation), please reach out to us at RecruitmentAccessibilityRequestsCanada@teladochealth.com
