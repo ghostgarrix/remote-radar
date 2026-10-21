@@ -2,6 +2,8 @@
 
 A Chrome extension (Manifest V3) that adds a badge to every LinkedIn job card telling you whether a "remote" job is really open to you:
 
+![Remote Radar badges on LinkedIn's job list](docs/screenshot.png)
+
 | Badge | Meaning |
 |---|---|
 | 🌍 **Worldwide** | Explicitly open to any country / time zone |
