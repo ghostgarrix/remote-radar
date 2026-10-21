@@ -86,6 +86,22 @@ const n = RR.evaluate(RR.classify(byName['No clues → no lean']), 'France');
 if (n.text !== 'No restriction stated') { console.log('FAIL  no-clue badge text:', n.text); fail++; }
 console.log(' guess fr-FR →', RR.guessHomeCountry(['fr-FR']), '| guess fr →', RR.guessHomeCountry(['fr']));
 
-const total = cases.length + 3;
+const cmp = (label, ok) => { if (!ok) { console.log('FAIL ', label); fail++; } };
+const evOf = (name) => RR.evaluate(RR.classify(byName[name]), 'France');
+const base = { enabled: true, mode: 'show', includeOrange: false, includeOnsite: false };
+const greenEv = eEU, redEv = eUS, orangeEv = eTZ, unclearEv = n;
+cmp('show hides nothing', ![greenEv, redEv, orangeEv, unclearEv].some((e) => RR.hides(e, base)));
+cmp('greens: keeps green', !RR.hides(greenEv, { ...base, mode: 'greens' }));
+cmp('greens: hides red/orange/unclear/onsite', [redEv, orangeEv, unclearEv, evOf('Teladoc: ☒ Hybrid in description')].every((e) => RR.hides(e, { ...base, mode: 'greens' })));
+cmp('greens: still-loading card stays visible', !RR.hides(null, { ...base, mode: 'greens' }));
+cmp('hide: hides red only by default', RR.hides(redEv, { ...base, mode: 'hide' }) && !RR.hides(orangeEv, { ...base, mode: 'hide' }) && !RR.hides(unclearEv, { ...base, mode: 'hide' }));
+cmp('hide + includeOrange', RR.hides(orangeEv, { ...base, mode: 'hide', includeOrange: true }));
+cmp('disabled hides nothing', !RR.hides(redEv, { ...base, enabled: false, mode: 'greens' }));
+cmp('legacy "dim" setting hides nothing', !RR.hides(redEv, { ...base, mode: 'dim' }));
+cmp('company match ignores case, accents, punctuation, legal suffix', RR.isBlockedCompany('Société  Générale, S.A.', ['societe generale']) && RR.isBlockedCompany('Acme Inc.', ['ACME']));
+cmp('company match is exact, not substring', !RR.isBlockedCompany('Meta Platforms', ['Meta']) && !RR.isBlockedCompany('Apple Bank', ['apple']));
+cmp('empty names never match', !RR.isBlockedCompany('', ['']) && !RR.isBlockedCompany('Acme', []));
+
+const total = cases.length + 3 + 11;
 console.log(`\n${total - fail}/${total} passed`);
 process.exit(fail ? 1 : 0);

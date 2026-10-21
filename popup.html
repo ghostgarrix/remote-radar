@@ -25,13 +25,23 @@
   </section>
 
   <section>
-    <span class="label">Jobs I can't take</span>
-    <div class="seg" role="radiogroup" aria-label="Jobs I can't take">
-      <label><input type="radio" name="mode" value="show"><span>Show</span></label>
-      <label><input type="radio" name="mode" value="hide"><span>Hide</span></label>
+    <span class="label">Job list</span>
+    <div class="seg" role="radiogroup" aria-label="Job list">
+      <label><input type="radio" name="mode" value="show"><span>Show all</span></label>
+      <label><input type="radio" name="mode" value="greens"><span>Greens only</span></label>
+      <label><input type="radio" name="mode" value="hide"><span>Hide locked</span></label>
     </div>
-    <label class="check"><input type="checkbox" id="includeOrange"> Include region &amp; time-zone mismatches</label>
-    <label class="check"><input type="checkbox" id="includeOnsite"> Include on-site &amp; hybrid jobs</label>
+    <p class="help" id="modeHelp"></p>
+    <div id="hideOptions">
+      <label class="check"><input type="checkbox" id="includeOrange"> Also hide region &amp; time-zone mismatches</label>
+      <label class="check"><input type="checkbox" id="includeOnsite"> Also hide on-site &amp; hybrid jobs</label>
+    </div>
+  </section>
+
+  <section>
+    <label class="label" for="blocked">Blocked companies</label>
+    <textarea id="blocked" rows="3" spellcheck="false" placeholder="One company per line"></textarea>
+    <p class="help">Their jobs are always hidden. You can also click 🚫 Block next to a company name on LinkedIn.</p>
   </section>
 
   <section class="legend">

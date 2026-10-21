@@ -87,3 +87,9 @@ button {
   background: var(--field); color: var(--fg); font: inherit; cursor: pointer;
 }
 button:hover { border-color: var(--accent); }
+
+textarea {
+  width: 100%; padding: 7px 8px; border: 1px solid var(--line); border-radius: 8px;
+  background: var(--field); color: var(--fg); font: inherit; resize: vertical;
+}
+[hidden] { display: none !important; }

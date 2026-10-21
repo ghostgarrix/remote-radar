@@ -12,7 +12,8 @@ LinkedIn's "Remote" filter can't tell "work from anywhere" from "remote, but US 
 
 • Badges on the job list and on the open job
 • Hover for the exact sentence the verdict is based on
-• Choose your country, and hide jobs you can't take
+• Choose your country; show everything, only the green jobs, or hide the ones you can't take
+• Block companies you never want to see, with one click
 • Understands English, French, German, Spanish, Portuguese and Italian postings
 • Private: everything runs in your browser. No account, no server, no tracking
 • Light on LinkedIn: only analyzes jobs you scroll past, throttled and cached

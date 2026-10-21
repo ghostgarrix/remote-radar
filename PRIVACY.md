@@ -6,7 +6,7 @@ Remote Radar is a browser extension that labels LinkedIn job cards as worldwide,
 
 **What it does with data**
 - It reads job titles, locations and descriptions on linkedin.com pages you visit, and requests the job posting from linkedin.com, to classify each job. This happens locally in your browser.
-- It stores your settings (home country, display options) in `chrome.storage.sync` and analysis results (job ID and verdict) in `chrome.storage.local`, which expire after 14 days.
+- It stores your settings (home country, display options, blocked companies you add) in `chrome.storage.sync` and analysis results (job ID and verdict) in `chrome.storage.local`, which expire after 14 days.
 
 **What it does not do**
 - It does not send any data to the developer or to any third party. There is no server, analytics, advertising or tracking.

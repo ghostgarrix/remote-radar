@@ -11,9 +11,10 @@
   const DEFAULT_SETTINGS = {
     enabled: true,
     homeCountry: '',      // '' = guess from browser language
-    mode: 'dim',          // what to do with jobs you can't take: 'show' | 'dim' | 'hide'
-    includeOrange: false, // also dim/hide region & time-zone mismatches
-    includeOnsite: false, // also dim/hide on-site & hybrid jobs
+    mode: 'show',         // 'show' everything | 'greens' only green badges | 'hide' the jobs you can't take
+    includeOrange: false, // 'hide' mode: also hide region & time-zone mismatches
+    includeOnsite: false, // 'hide' mode: also hide on-site & hybrid jobs
+    blockedCompanies: [], // company names whose jobs are always hidden
   };
 
   // ---------------------------------------------------------------------------
@@ -496,6 +497,27 @@
     }
   }
 
+  // Should this card be hidden? (blocked companies are handled separately: they're always hidden)
+  function hides(ev, s) {
+    if (!ev || !s.enabled) return false;
+    if (s.mode === 'greens') return ev.tone !== 'green';
+    if (s.mode !== 'hide') return false;
+    return ev.block === 'red' || (ev.block === 'orange' && !!s.includeOrange) || (ev.block === 'onsite' && !!s.includeOnsite);
+  }
+
+  // "Acme, Inc." and "ACME inc" are the same company.
+  const LEGAL_SUFFIX = /\s(?:inc|llc|ltd|limited|gmbh|sas|sarl|sa|ag|bv|corp|corporation|co|plc)$/;
+  function normCompany(name) {
+    let n = String(name || '').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/\./g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+    while (LEGAL_SUFFIX.test(n)) n = n.replace(LEGAL_SUFFIX, '');
+    return n;
+  }
+  function isBlockedCompany(name, list) {
+    const n = normCompany(name);
+    return !!n && (list || []).some((b) => normCompany(b) === n);
+  }
+
   function guessHomeCountry(languages) {
     for (const l of languages || []) {
       try {
@@ -508,7 +530,7 @@
 
   const API = {
     RULES_VERSION, CACHE_PREFIX, DEFAULT_SETTINGS, HOME_OPTIONS, HOME_REGIONS,
-    classify, evaluate, workplaceOf, guessHomeCountry, findPlaces, sentences,
+    classify, evaluate, hides, normCompany, isBlockedCompany, workplaceOf, guessHomeCountry, findPlaces, sentences,
   };
   if (typeof module === 'object' && module.exports) module.exports = API;
   else root.RemoteRadar = API;

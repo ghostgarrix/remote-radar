@@ -433,9 +433,80 @@
     return wrap;
   }
 
-  function isBlocked(ev) {
-    if (!ev || !settings.enabled || settings.mode === 'show') return false;
-    return ev.block === 'red' || (ev.block === 'orange' && settings.includeOrange) || (ev.block === 'onsite' && settings.includeOnsite);
+  // ------------------------------------------------------- company & block list
+  // The company comes from the card's /company/ link, else from the line right under the title.
+  function companyOf(card, id) {
+    const m = meta.get(id) || {};
+    if (m.company) return m.company;
+    let name = '';
+    for (const a of card.querySelectorAll('a[href*="/company/"]')) {
+      const t = (a.textContent || '').trim();
+      if (t && t.length <= 80) { name = t; break; }
+    }
+    if (!name && m.title) {
+      const lines = (card.innerText || '').split('\n').map((s) => s.trim()).filter(Boolean);
+      const i = lines.findIndex((l) => norm(l) === norm(m.title));
+      const next = i >= 0 ? lines.slice(i + 1).find((l) => !/verif/i.test(l)) : '';
+      if (next && next.length <= 80 && !RR.workplaceOf(next) && !/\(\s*[^)]+\)\s*$/.test(next)) name = next;
+    }
+    if (name) meta.set(id, { ...m, company: name });
+    return name;
+  }
+
+  const visibleLeaf = (root, text) => {
+    for (const el of root.querySelectorAll('*')) {
+      if (el.children.length || el.closest('.rr-wrap, .rr-block')) continue;
+      if ((el.textContent || '').trim() !== text) continue;
+      const r = el.getBoundingClientRect();
+      if (r.width > 2 && r.height > 2) return el; // skips screen-reader-only copies of the name
+    }
+    return null;
+  };
+
+  function ensureBlockLink(card, company) {
+    const old = card.querySelector('.rr-block');
+    if (!company) { if (old) old.remove(); return; }
+    if (old && old.dataset.company === company) return;
+    if (old) old.remove();
+    const el = visibleLeaf(card, company);
+    if (!el) return;
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'rr-block';
+    btn.dataset.company = company;
+    btn.title = `Hide all jobs from ${company}`;
+    btn.setAttribute('aria-label', `Block ${company}`);
+    btn.addEventListener('click', (e) => { e.preventDefault(); e.stopPropagation(); blockCompany(company); });
+    const p = el.parentElement;
+    const host = el.tagName === 'A' && p && p !== card && (p.textContent || '').trim() === (el.textContent || '').trim() ? p : el;
+    if (host.tagName === 'A') host.after(btn); else host.appendChild(btn);
+  }
+
+  function saveBlocked(list) {
+    settings.blockedCompanies = list;
+    renderAll();
+    if (alive()) chrome.storage.sync.set({ blockedCompanies: list }).catch((e) => log(e));
+  }
+
+  function blockCompany(name) {
+    const before = settings.blockedCompanies || [];
+    saveBlocked(RR.isBlockedCompany(name, before) ? before : [...before, name]);
+    toast(`Blocked ${name}`, () => saveBlocked((settings.blockedCompanies || []).filter((b) => !RR.isBlockedCompany(name, [b]))));
+  }
+
+  function toast(text, undo) {
+    document.querySelectorAll('.rr-toast').forEach((t) => t.remove());
+    const t = document.createElement('div');
+    t.className = 'rr-toast';
+    const msg = document.createElement('span');
+    msg.textContent = text;
+    const u = document.createElement('button');
+    u.type = 'button';
+    u.textContent = 'Undo';
+    u.addEventListener('click', () => { undo(); t.remove(); });
+    t.append(msg, u);
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 7000);
   }
 
   const leafWith = (root, text) => {
@@ -486,6 +557,8 @@
     let wrap = card.querySelector('.rr-wrap');
     if (!settings.enabled) {
       if (wrap) wrap.remove();
+      const b = card.querySelector('.rr-block');
+      if (b) b.remove();
       card.classList.remove('rr-hidden');
       return;
     }
@@ -495,8 +568,9 @@
       wrap = makeBadge(ev, key, '', id);
       placeBadge(card, wrap, id);
     }
-    const blocked = isBlocked(ev);
-    card.classList.toggle('rr-hidden', blocked && settings.mode === 'hide');
+    const company = companyOf(card, id);
+    card.classList.toggle('rr-hidden', RR.isBlockedCompany(company, settings.blockedCompanies) || RR.hides(ev, settings));
+    ensureBlockLink(card, company);
   }
 
   function renderId(id) {
@@ -733,6 +807,7 @@
         const fresh = readCardMeta(card);
         if (fresh.title || fresh.location) meta.set(id, fresh);
       }
+      if (RR.isBlockedCompany(companyOf(card, id), settings.blockedCompanies)) { render(card, id); continue; } // no lookup for blocked companies
       if (!results.has(id)) {
         const mm = meta.get(id) || {};
         if (mm.workplace === 'onsite' || mm.workplace === 'hybrid') store(id, RR.classify(mm), true);
@@ -748,7 +823,7 @@
     for (const m of muts) {
       for (const n of [...m.addedNodes, ...m.removedNodes]) {
         if (n.nodeType !== 1) continue;
-        if (n.classList && (n.classList.contains('rr-chip') || (n.classList.contains('rr-wrap') && m.addedNodes.length))) continue;
+        if (n.classList && (n.classList.contains('rr-chip') || n.classList.contains('rr-block') || n.classList.contains('rr-toast') || (n.classList.contains('rr-wrap') && m.addedNodes.length))) continue;
         return scheduleScan();
       }
     }

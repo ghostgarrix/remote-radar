@@ -39,8 +39,8 @@ Works in any Chromium browser (Chrome, Edge, Brave, Arc) on macOS, Windows and L
 ## Settings (popup)
 
 - **I can work from** — decides what turns green.
-- **Jobs I can't take** — Show / Hide the 🔒 ones.
-- Options to also include region/time-zone mismatches and on-site/hybrid jobs.
+- **Job list** — *Show all* (badges only), *Greens only* (hides everything that isn't 🌍 or ✅, including unclear jobs) or *Hide locked* (hides the 🔒 ones; options let you also hide region/time-zone mismatches and on-site/hybrid jobs).
+- **Blocked companies** — one name per line; their jobs are always hidden and never looked up. Each card also has a small 🚫 Block link next to the company name (with an Undo toast). Names match exactly, ignoring case, accents, punctuation and endings like Inc/Ltd/GmbH.
 - **Re-check all jobs** — clears the cache.
 
 ## Tests

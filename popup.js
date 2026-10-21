@@ -20,9 +20,32 @@
     $(k).checked = s[k];
     $(k).addEventListener('change', (e) => chrome.storage.sync.set({ [k]: e.target.checked }));
   }
+  const MODE_HELP = {
+    show: 'Every job stays in the list; only the badges are added.',
+    greens: 'Only green badges stay: worldwide or open to your country.',
+    hide: 'Hides jobs locked to other countries.',
+  };
+  const showMode = (mode) => {
+    $('modeHelp').textContent = MODE_HELP[mode];
+    $('hideOptions').hidden = mode !== 'hide';
+  };
+  const mode = ['greens', 'hide'].includes(s.mode) ? s.mode : 'show';
+  showMode(mode);
   document.querySelectorAll('input[name="mode"]').forEach((r) => {
-    r.checked = r.value === (s.mode === 'hide' ? 'hide' : 'show');
-    r.addEventListener('change', () => chrome.storage.sync.set({ mode: r.value }));
+    r.checked = r.value === mode;
+    r.addEventListener('change', () => { showMode(r.value); chrome.storage.sync.set({ mode: r.value }); });
+  });
+
+  // Blocked companies
+  const blocked = $('blocked');
+  blocked.value = (s.blockedCompanies || []).join('\n');
+  let saveTimer = null;
+  blocked.addEventListener('input', () => {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(() => {
+      const list = [...new Set(blocked.value.split('\n').map((l) => l.trim()).filter(Boolean))];
+      chrome.storage.sync.set({ blockedCompanies: list });
+    }, 400);
   });
 
   // Cache stats / reset
