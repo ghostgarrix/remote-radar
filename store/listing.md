@@ -33,5 +33,5 @@ Collects no user data. Do not check any data-collection box. Certify: no sale of
 
 ## Assets to prepare
 - Icon 128×128: `icons/icon128.png` (done)
-- At least 1 screenshot, 1280×800 or 640×400 (job list with badges, popup)
+- Screenshots 1280×800 (done): `store/screenshot-1-main-1280x800.png` (job list, open job and settings popup, the main one) and `store/screenshot-2-list-1280x800.png` (job list). Profile picture and bookmarks bar are blurred
 - Small promo tile 440×280 (optional but recommended)
