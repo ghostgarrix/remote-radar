@@ -5,7 +5,7 @@
 (function (root) {
   'use strict';
 
-  const RULES_VERSION = 2;
+  const RULES_VERSION = 3;
   const CACHE_PREFIX = `rr${RULES_VERSION}:`;
 
   const DEFAULT_SETTINGS = {
@@ -33,6 +33,8 @@
   const NOT_US = '(?<!(?:ABOUT|JOIN|CONTACT|WITH|FOR|TO|OF|LET|HELP|TELL|GIVE|SEND|BY|AMONG|MEET|CALL|FOLLOW|EMAIL|AT) )';
 
   const P = (label, kind, ...res) => ({ label, kind, res });
+  // "German residents", "French work permit": a demonym only counts as a place next to a residency word.
+  const demo = (adj) => rx('\\b(?:' + adj + ') (?:residents?|citizens?|citizenship|nationals?|work (?:permit|authori[sz]ation|visa)|labou?r law|tax residen(?:t|cy)|payroll|entity)\\b');
   const PLACES = [
     // --- countries
     P('US', 'country',
@@ -40,27 +42,27 @@
       rx('\\bunited states\\b|\\bétats[- ]unis\\b|\\bestados unidos\\b|\\bamerican (?:citizens?|residents?)\\b'),
       rx('\\b(?:' + US_STATES.join('|') + ')\\b')),
     P('Canada', 'country', rx('\\bcanad(?:a|ian|ians|á|ienne|iens|ien)\\b')),
-    P('Mexico', 'country', rx('(?<!new )\\bmexico\\b|\\bméxico\\b|\\bmexique\\b')),
-    P('Brazil', 'country', rx('\\b(?:brazil|brasil|brésil)\\b')),
+    P('Mexico', 'country', rx('(?<!new )\\bmexico\\b|\\bméxico\\b|\\bmexique\\b'), demo('mexican')),
+    P('Brazil', 'country', rx('\\b(?:brazil|brasil|brésil)\\b'), demo('brazilian')),
     P('Argentina', 'country', rx('\\b(?:argentina|argentine)\\b')),
     P('Colombia', 'country', rx('\\b(?:colombia|colombie)\\b')),
     P('Chile', 'country', rx('\\bchile\\b')),
     P('UK', 'country', rx('\\bUK\\b', ''), rx('\\bunited kingdom\\b|\\bgreat britain\\b|\\bengland\\b|\\broyaume[- ]uni\\b|\\bbritish\\b')),
-    P('Ireland', 'country', rx('\\b(?:ireland|irlande)\\b')),
-    P('France', 'country', rx('\\bfrance\\b')),
-    P('Germany', 'country', rx('\\b(?:germany|deutschland|allemagne|alemania)\\b')),
-    P('Spain', 'country', rx('\\b(?:spain|españa|espagne)\\b')),
-    P('Portugal', 'country', rx('\\bportugal\\b')),
-    P('Italy', 'country', rx('\\b(?:italy|italia|italie)\\b')),
-    P('Netherlands', 'country', rx('\\b(?:netherlands|holland|pays[- ]bas|nederland)\\b')),
-    P('Belgium', 'country', rx('\\b(?:belgium|belgique|belgië)\\b')),
-    P('Switzerland', 'country', rx('\\b(?:switzerland|suisse|schweiz)\\b')),
-    P('Austria', 'country', rx('\\b(?:austria|autriche|österreich)\\b')),
-    P('Poland', 'country', rx('\\b(?:poland|pologne|polska)\\b')),
+    P('Ireland', 'country', rx('\\b(?:ireland|irlande)\\b'), demo('irish')),
+    P('France', 'country', rx('\\bfrance\\b'), demo('french')),
+    P('Germany', 'country', rx('\\b(?:germany|deutschland|allemagne|alemania)\\b'), demo('german')),
+    P('Spain', 'country', rx('\\b(?:spain|españa|espagne)\\b'), demo('spanish')),
+    P('Portugal', 'country', rx('\\bportugal\\b'), demo('portuguese')),
+    P('Italy', 'country', rx('\\b(?:italy|italia|italie)\\b'), demo('italian')),
+    P('Netherlands', 'country', rx('\\b(?:netherlands|holland|pays[- ]bas|nederland)\\b'), demo('dutch')),
+    P('Belgium', 'country', rx('\\b(?:belgium|belgique|belgië)\\b'), demo('belgian')),
+    P('Switzerland', 'country', rx('\\b(?:switzerland|suisse|schweiz)\\b'), demo('swiss')),
+    P('Austria', 'country', rx('\\b(?:austria|autriche|österreich)\\b'), demo('austrian')),
+    P('Poland', 'country', rx('\\b(?:poland|pologne|polska)\\b'), demo('polish')),
     P('Romania', 'country', rx('\\b(?:romania|roumanie)\\b')),
     P('Czechia', 'country', rx('\\b(?:czech republic|czechia|tchéquie)\\b')),
     P('Greece', 'country', rx('\\b(?:greece|grèce)\\b')),
-    P('Sweden', 'country', rx('\\b(?:sweden|suède)\\b')),
+    P('Sweden', 'country', rx('\\b(?:sweden|suède)\\b'), demo('swedish')),
     P('Norway', 'country', rx('\\b(?:norway|norvège)\\b')),
     P('Denmark', 'country', rx('\\b(?:denmark|danemark)\\b')),
     P('Finland', 'country', rx('\\b(?:finland|finlande)\\b')),
@@ -73,12 +75,12 @@
     P('Israel', 'country', rx('\\b(?:israel|israël)\\b')),
     P('UAE', 'country', rx('\\bUAE\\b', ''), rx('\\bunited arab emirates\\b|\\bdubai\\b')),
     P('Turkey', 'country', rx('\\b(?:türkiye|turquie)\\b')),
-    P('India', 'country', rx('\\bindia\\b|\\binde\\b')),
+    P('India', 'country', rx('\\bindia\\b|\\binde\\b'), demo('indian')),
     P('Pakistan', 'country', rx('\\bpakistan\\b')),
     P('Philippines', 'country', rx('\\bphilippines\\b')),
     P('Singapore', 'country', rx('\\b(?:singapore|singapour)\\b')),
     P('Japan', 'country', rx('\\b(?:japan|japon)\\b')),
-    P('Australia', 'country', rx('\\b(?:australia|australie)\\b')),
+    P('Australia', 'country', rx('\\b(?:australia|australie)\\b'), demo('australian')),
     P('New Zealand', 'country', rx('\\b(?:new zealand|nouvelle[- ]zélande)\\b')),
     // --- regions
     P('EU', 'region', rx('\\bEU\\b', ''), rx('\\beuropean union\\b|\\bunion européenne\\b')),
@@ -122,7 +124,7 @@
   // ---------------------------------------------------------------------------
   // Signal patterns
   // ---------------------------------------------------------------------------
-  const RESTRICT = rx('\\b(?:must|only|exclusively|required?|requires|requirement|eligible|eligibility|authori[sz]ed|authori[sz]ation|work(?:ing)? permit|right to work|reside|resides|residing|residen(?:ce|t|ts|cy)|citizens?|citizenship|green card|W-?2|1099|clearance|limited to|restricted to|hiring (?:in|from)|open to (?:candidates|applicants|people|those) (?:in|from|based|located|living)|(?:candidates|applicants) (?:in|from|based|located|living)|you (?:are|live|reside) in|based (?:in|out of)|located (?:in|within)|living in|physically|uniquement|seulement|obligatoire|résid(?:er|ant|ence|ents?)|basée? (?:en|au|aux|à|dans)|située? (?:en|au|aux|à|dans)|autorisation de travail|permis de travail|domiciliée?|ansässig|wohnhaft|wohnsitz|arbeitserlaubnis|arbeitsgenehmigung|ausschließlich|residir|residente|residencia|permiso de trabajo|únicamente|somente|autorização de trabalho|permesso di lavoro|residenza)\\b');
+  const RESTRICT = rx('\\b(?:must|only|exclusively|required?|requires|requirement|eligible|eligibility|authori[sz]ed|authori[sz]ation|work(?:ing)? permit|right to work|reside|resides|residing|residen(?:ce|t|ts|cy)|citizens?|citizenship|green card|W-?2|1099|clearance|limited to|restricted to|hiring (?:in|from)|open to (?:candidates|applicants|people|those) (?:in|from|based|located|living)|(?:candidates|applicants) (?:in|from|based|located|living)|you (?:are|live|reside) in|based (?:in|out of)|located (?:in|within)|-based|living in|physically|uniquement|seulement|obligatoire|résid(?:er|ant|ence|ents?)|basée? (?:en|au|aux|à|dans)|située? (?:en|au|aux|à|dans)|autorisation de travail|permis de travail|domiciliée?|ansässig|wohnhaft|wohnsitz|arbeitserlaubnis|arbeitsgenehmigung|ausschließlich|residir|residente|residencia|permiso de trabajo|únicamente|somente|autorização de trabalho|permesso di lavoro|residenza)\\b');
   const COMPANY_SUBJECT = rx("\\b(?:we|we're|we are|our|company|startup|headquarter(?:s|ed)?|HQ|offices?|founded|the team is)\\b");
   const CANDIDATE = rx("\\b(?:must|only|eligible|authori[sz]ed|reside|residing|citizens?|(?:candidates?|applicants?) (?:must|should|need)|you (?:must|need|should|will need)|you(?:'re| are) (?:based|located))\\b");
   const STRONG = rx('\\b(?:must|only|required to|eligible|authori[sz]ed)\\b');
@@ -134,7 +136,11 @@
   const EOR = rx('\\b(?:deel|remote\\.com|oyster ?hr|papaya global|velocity global|multiplier|employer of record|EOR)\\b');
   const OUTSIDE_BEFORE = rx('\\boutside (?:of )?(?:the )?$');
   const NEGATION = rx("\\b(?:not|unable|cannot|can't|can not|don't|do not|won't|no)\\b");
-  const ANYWHERE_BEFORE = rx('\\b(?:anywhere|everywhere|remote(?:ly)?)\\s+(?:in|within|across|throughout|from)\\s+(?:the\\s+)?(?:continental\\s+)?$');
+  const ANYWHERE_BEFORE = rx('\\b(?:(?:anywhere|everywhere|remote(?:ly)?)\\s+(?:in|within|across|throughout|from)|work(?:ing)?\\s+(?:remotely\\s+)?from(?:\\s+home)?(?:\\s+in)?|work(?:ing)?\\s+remotely\\s+(?:in|within))\\s+(?:the\\s+)?(?:continental\\s+)?$');
+  // "must be authorized to work", "no sponsorship": a residency rule even when no country is named
+  // (the country is then the one LinkedIn lists the job in).
+  const WORK_AUTH = rx("\\b(?:(?:must|need to|have to|should) (?:be )?(?:legally |currently )?(?:authori[sz]ed|eligible|able|entitled|permitted) to work|(?:legally |currently )?(?:authori[sz]ed|eligible|entitled) to work|(?:legal )?right to work|work (?:permit|authori[sz]ation)|(?:no|not|without|unable to|cannot|can't|do not|does not|don't) (?:\\w+ ){0,3}sponsor\\w*)\\b");
+  const WORK_AUTH_GENERIC = rx("\\b(?:country of (?:residence|employment|work)|where you (?:live|reside|are based)|in your (?:own )?(?:country|location)|their (?:country|location)|(?:offer|provide|can|will) (?:\\w+ ){0,2}sponsor)\\w*");
   const REMOTE_WORD = rx('\\b(?:remote|remotely|à distance|télétravail|teletrabajo|remoto|location|localisation|lieu)\\b');
   const TZ_CONTEXT = rx('\\b(?:overlap|hours|time ?zones?|timezone|between|during|aligned|available|core|schedule|must|required|work(?:ing)?)\\b');
 
@@ -308,6 +314,15 @@
     return found;
   }
 
+  // Country of a LinkedIn location line ("Paris", "Allemagne", "Toronto, ON") or null.
+  function placeOf(text) {
+    if (!text) return null;
+    const c = findPlaces(text).filter((p) => p.kind === 'country').sort((a, b) => a.index - b.index);
+    if (c.length) return c[0].label;
+    for (const [re, label] of CITY_RES) if (re.test(text)) return label;
+    return null;
+  }
+
   const clip = (s, n = 220) => (s && s.length > n ? s.slice(0, n - 1) + '…' : s || null);
 
   // ---------------------------------------------------------------------------
@@ -328,8 +343,10 @@
       hasDescription: String(description).trim().length > 100,
     };
 
+    const hintCountry = placeOf(hint);
     if (workplace === 'onsite' || workplace === 'hybrid') {
       out.verdict = 'onsite';
+      out.where = hintCountry;
       return out;
     }
 
@@ -346,6 +363,7 @@
       if (workplace === 'remote') out.notes.push(`LinkedIn lists this job as remote, but the description says ${dm.mode === 'hybrid' ? 'hybrid' : 'on-site'}`);
       const l = leanClues(full, bodyLines, hint, lines.filter((x) => US_BENEFITS.test(x)).length);
       if (l) { out.lean = l.lean; out.clues = l.clues; }
+      out.where = hintCountry || (l && !l.lean.includes('/') ? l.lean : null);
       return out;
     }
 
@@ -371,6 +389,10 @@
       const wwScore = WORLDWIDE_STRONG.test(s) ? 3 : WORLDWIDE_SOFT.test(s) && WW_CONTEXT.test(s) ? 2 : 0;
 
       if (!places.length) {
+        if (!wwScore && hintCountry && WORK_AUTH.test(s) && !WORK_AUTH_GENERIC.test(s)) {
+          addR({ label: hintCountry, kind: 'country' }, 3, s);
+          continue;
+        }
         if (wwScore) {
           ww += wwScore;
           wwEvidence = wwEvidence || s;
@@ -474,8 +496,15 @@
     switch (r.verdict) {
       case 'worldwide':
         return { tone: 'green', icon: '🌍', text: 'Worldwide', tip: tip([quote, ...(r.notes || [])]), block: null };
-      case 'onsite':
-        return { tone: 'grey', icon: '🏢', text: r.workplace === 'hybrid' ? 'Hybrid' : 'On-site', tip: tip(['Not a fully remote job', ...(r.notes || []), quote, r.clues && r.clues.length ? `Likely ${r.lean} (${r.clues.join('; ')})` : null]), block: 'onsite' };
+      case 'onsite': {
+        const mode = r.workplace === 'hybrid' ? 'Hybrid' : 'On-site';
+        // Not remote, but still tells you whether it's in your country (green) or abroad (red).
+        const where = r.where || null;
+        const tone = !where ? 'grey' : where === home ? 'green' : 'red';
+        const place = where ? `${mode} · ${where}` : mode;
+        const lead = where ? `Not a fully remote job, located in ${DISPLAY_NAME[where] || where}` : 'Not a fully remote job';
+        return { tone, icon: '🏢', text: place, tip: tip([lead, ...(r.notes || []), quote, !where && r.clues && r.clues.length ? `Likely ${r.lean} (${r.clues.join('; ')})` : null]), block: 'onsite' };
+      }
       case 'restricted': {
         const label = summarize(r.places);
         const all = r.places.map((p) => DISPLAY_NAME[p.label] || p.label).join(', ');
@@ -530,7 +559,7 @@
 
   const API = {
     RULES_VERSION, CACHE_PREFIX, DEFAULT_SETTINGS, HOME_OPTIONS, HOME_REGIONS,
-    classify, evaluate, hides, normCompany, isBlockedCompany, workplaceOf, guessHomeCountry, findPlaces, sentences,
+    classify, evaluate, hides, normCompany, isBlockedCompany, workplaceOf, guessHomeCountry, findPlaces, placeOf, sentences,
   };
   if (typeof module === 'object' && module.exports) module.exports = API;
   else root.RemoteRadar = API;

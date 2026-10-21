@@ -12,7 +12,7 @@ A Chrome extension (Manifest V3) that adds a badge to every LinkedIn job card te
 | 🧭 **LATAM only** / 🕒 **US time zones** | Region or time-zone requirement that doesn't match you |
 | 🤔 **Unclear · likely Germany** | No explicit rule, but clues point to a country (location, currency, required language, company country, local terms) — hover to see them |
 | 🔎 **No restriction stated** | Description read, no location rule and no clues |
-| 🏢 **On-site / Hybrid** | Not fully remote |
+| 🏢 **On-site / Hybrid · Germany** | Not fully remote. Green if it's in your country, red if abroad, grey if the country can't be told |
 
 Hover a badge to see the exact sentence or clues it's based on. **Click a badge** to copy a report (verdict, reasons and the job text) — paste it in a chat if a badge looks wrong.
 

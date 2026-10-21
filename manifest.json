@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Remote Radar – remote job filter for LinkedIn",
   "short_name": "Remote Radar",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Shows on every LinkedIn job card whether the remote job is worldwide, limited to a region, or locked to one country.",
   "permissions": ["storage"],
   "icons": {

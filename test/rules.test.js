@@ -47,6 +47,18 @@ const cases = [
   ['"hybrid cloud" is not hybrid work', { title: 'Dev', location: US, description: 'Experience with hybrid cloud infrastructure and Kubernetes is a plus. ' + FILLER }, { verdict: 'unclear' }],
   ['3 days in the office → hybrid', { title: 'Dev', location: US, workplace: 'remote', description: 'We expect three days a week in the office, with the rest of the week remote. ' + FILLER }, { verdict: 'onsite', workplace: 'hybrid' }],
   ['"Remote ☒" checkbox stays remote', { title: 'Dev', location: US, workplace: 'remote', description: 'Work Environment ☐ Office ☐ Hybrid ☒ Remote. ' + FILLER }, { verdict: 'unclear' }],
+  // ---- detection of "remote, but only in country X"
+  ['No sponsorship, no country named → country of the card', { title: 'Dev', location: 'Germany (Remote)', description: 'This is a fully remote role. Candidates must be legally authorized to work without sponsorship. ' + FILLER }, { verdict: 'restricted', places: ['Germany'] }],
+  ['"authorized to work" but no card country → stays unclear', { title: 'Dev', location: '', description: 'This is a fully remote role. Candidates must be legally authorized to work without sponsorship. ' + FILLER }, { verdict: 'unclear' }],
+  ['Authorized to work in their country of residence is not a restriction', { title: 'Dev', location: 'Germany (Remote)', description: 'Candidates must be legally authorized to work in their country of residence. We hire globally and are fully remote. ' + FILLER }, { verdict: 'worldwide' }],
+  ['We offer visa sponsorship is not a restriction', { title: 'Dev', location: 'Germany (Remote)', description: 'We can sponsor visas for the right candidate and are authorized to work with many talents. ' + FILLER }, { verdict: 'unclear' }],
+  ['Germany-based', { title: 'Dev', location: '', description: 'We are looking for a Germany-based engineer to join our remote team. ' + FILLER }, { verdict: 'restricted', places: ['Germany'] }],
+  ['US-based', { title: 'Dev', location: '', description: 'This is a US-based remote position. ' + FILLER }, { verdict: 'restricted', places: ['US'] }],
+  ['Work remotely from Germany', { title: 'Dev', location: '', description: 'You will work remotely from Germany with occasional team events. ' + FILLER }, { verdict: 'restricted', places: ['Germany'] }],
+  ['Work from home in Spain', { title: 'Dev', location: '', description: 'You can work from home in Spain and join our offices twice a year. ' + FILLER }, { verdict: 'restricted', places: ['Spain'] }],
+  ['German residents', { title: 'Dev', location: '', description: 'Only German residents can be considered for this remote role. ' + FILLER }, { verdict: 'restricted', places: ['Germany'] }],
+  ['French work permit', { title: 'Dev', location: '', description: 'You need a valid French work permit to apply for this remote role. ' + FILLER }, { verdict: 'restricted', places: ['France'] }],
+  ['Company based in Germany is not a rule', { title: 'Dev', location: '', description: 'We are a Germany-based company with a distributed team. ' + FILLER }, { verdict: 'unclear' }],
   ['LinkedIn location "Worldwide"', { title: 'Dev', location: 'Worldwide (Remote)', description: FILLER }, { verdict: 'worldwide' }],
 ];
 
@@ -102,6 +114,13 @@ cmp('company match ignores case, accents, punctuation, legal suffix', RR.isBlock
 cmp('company match is exact, not substring', !RR.isBlockedCompany('Meta Platforms', ['Meta']) && !RR.isBlockedCompany('Apple Bank', ['apple']));
 cmp('empty names never match', !RR.isBlockedCompany('', ['']) && !RR.isBlockedCompany('Acme', []));
 
-const total = cases.length + 3 + 11;
+const onsite = (loc, home) => RR.evaluate(RR.classify({ title: 'Dev', location: loc, workplace: loc.includes('Hybrid') ? 'hybrid' : 'onsite' }), home);
+cmp('on-site in your country is green', onsite('Paris (On-site)', 'France').tone === 'green' && onsite('Paris (On-site)', 'France').text === 'On-site · France');
+cmp('on-site abroad is red', onsite('Paris (On-site)', 'Germany').tone === 'red');
+cmp('French UI: Allemagne (Hybrid) is Germany', onsite('Allemagne (Hybrid)', 'France').tone === 'red' && onsite('Allemagne (Hybrid)', 'Germany').tone === 'green');
+cmp('on-site, unknown country stays grey', onsite('Somewhere (On-site)', 'France').tone === 'grey');
+cmp('on-site still counted as on-site for hiding', onsite('Paris (On-site)', 'France').block === 'onsite');
+
+const total = cases.length + 3 + 11 + 5;
 console.log(`\n${total - fail}/${total} passed`);
 process.exit(fail ? 1 : 0);
