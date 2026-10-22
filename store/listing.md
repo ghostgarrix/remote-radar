@@ -34,5 +34,5 @@ Collects no user data. Do not check any data-collection box. Certify: no sale of
 
 ## Assets to prepare
 - Icon 128×128: `icons/icon128.png` (done)
-- Screenshots 1280×800 (done): `store/screenshot-1-main-1280x800.png` (job list, open job and settings popup, the main one) and `store/screenshot-2-list-1280x800.png` (job list). Profile picture and bookmarks bar are blurred
+- Screenshots 1280×800 (done): `store/screenshot-1-main-1280x800.png` (job list, open job and the current settings popup: the main one), `screenshot-2-badges-1280x800.png` (older popup without Greens only / Blocked companies, replace before submitting if you can) and `screenshot-3-list-1280x800.png` (list only). The bookmarks bar is blurred
 - Small promo tile 440×280 (optional but recommended)
